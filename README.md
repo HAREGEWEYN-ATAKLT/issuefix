@@ -1,36 +1,198 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IssueFix
 
-## Getting Started
+> **AI-assisted code review and issue detection for developers**
 
-First, run the development server:
+IssueFix is a developer-focused code review platform that analyzes repositories, detects potential issues, collects supporting evidence, applies configurable policies, and presents actionable findings through a web interface.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Built for the **IBM Bob Hackathon**.
+
+---
+
+## 🚀 What is IssueFix?
+
+Code reviews can be time-consuming, especially when developers need to manually inspect large amounts of code for common security, quality, and maintainability problems.
+
+**IssueFix** provides a structured workflow for automated code review:
+
+```text
+Repository
+    │
+    ▼
+┌──────────────────┐
+│ Evidence         │
+│ Collection       │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Review Provider  │
+│ / Code Analysis  │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Policy Engine    │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Verification     │
+│ Engine           │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Findings         │
+│ & Review UI      │
+└──────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The goal is not simply to report a problem, but to provide developers with useful evidence and a structured finding that can be investigated and resolved.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+### Code Review
 
-To learn more about Next.js, take a look at the following resources:
+* Analyze a repository for potential issues
+* Generate structured review findings
+* Track individual review runs
+* Inspect findings through the web interface
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Evidence Collection
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+IssueFix collects evidence related to detected issues so developers can understand **why** something was flagged.
 
-## Deploy on Vercel
+### Policy Engine
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The policy engine provides a structured way to apply project-specific rules to review findings.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Verification
+
+Findings can be passed through a verification layer before being presented to the developer.
+
+### Local Review Provider
+
+IssueFix currently includes a local review provider that can analyze the included demonstration repository.
+
+### Web Dashboard
+
+The Next.js application provides pages for:
+
+* Reviews
+* Individual review details
+* Findings
+* Individual finding details
+* Running reviews
+* Settings
+
+---
+
+## 🏗️ Tech Stack
+
+| Technology   | Purpose                        |
+| ------------ | ------------------------------ |
+| Next.js      | Web application and API routes |
+| React        | Frontend UI                    |
+| TypeScript   | Application development        |
+| Prisma       | Database ORM                   |
+| SQLite       | Local development database     |
+| Vitest       | Automated testing              |
+| Tailwind/CSS | UI styling                     |
+| Node.js      | Runtime                        |
+
+---
+
+## 📁 Project Structure
+
+```text
+issuefix/
+│
+├── app/
+│   ├── api/
+│   │   └── reviews/
+│   │       ├── [reviewId]/
+│   │       ├── run/
+│   │       └── route.ts
+│   │
+│   ├── findings/
+│   │   ├── [findingId]/
+│   │   └── page.tsx
+│   │
+│   ├── reviews/
+│   │   ├── [reviewId]/
+│   │   └── page.tsx
+│   │
+│   ├── run/
+│   ├── settings/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── lib/
+│   ├── evidence/
+│   │   ├── collector.ts
+│   │   └── types.ts
+│   │
+│   ├── policy/
+│   │   └── engine.ts
+│   │
+│   ├── review/
+│   │   ├── local-provider.ts
+│   │   └── provider.ts
+│   │
+│   ├── verification/
+│   │   └── engine.ts
+│   │
+│   └── prisma.ts
+│
+├── prisma/
+│   ├── migrations/
+│   └── schema.prisma
+│
+├── sample-payment-service/
+│   ├── src/
+│   └── tests/
+│
+├── tests/
+│   └── policy-engine.test.ts
+│
+├── public/
+│
+├── package.json
+├── next.config.ts
+├── prisma7.config.ts
+├── tsconfig.json
+└── README.md
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Reviews
+
+#### `GET /api/reviews`
+
+Returns available reviews.
+
+#### `POST /api/reviews`
+
+Creates a new review.
+
+#### `GET /api/reviews/:reviewId`
+
+Returns information about a specific review.
+
+#### `POST /api/reviews/run`
+
+Starts a review run against a repository.
+
+---
+
+## 🧪 Testing
+
+IssueFix uses **Vitest** for automated tests.
+
+Run the complete tes
