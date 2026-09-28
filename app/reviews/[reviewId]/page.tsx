@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -49,12 +50,15 @@ export default async function ReviewDetailPage({ params }: PageProps) {
   ).length;
 
   return (
-    <main className="min-h-screen bg-[#f8f9fa] text-[#161616]">
+    <main className="min-h-screen overflow-x-hidden bg-[#f8f9fa] text-[#161616]">
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="hidden w-64 border-r border-[#e0e0e0] bg-white md:flex md:flex-col">
-          <div className="flex h-16 items-center border-b border-[#e0e0e0] px-6">
-            <Link href="/reviews" className="text-lg font-semibold tracking-tight">
+        <aside className="hidden w-64 shrink-0 border-r border-[#e0e0e0] bg-white lg:flex lg:flex-col">
+          <div className="flex h-16 shrink-0 items-center border-b border-[#e0e0e0] px-6">
+            <Link
+              href="/reviews"
+              className="text-lg font-semibold tracking-tight"
+            >
               IssueFix
             </Link>
           </div>
@@ -98,37 +102,60 @@ export default async function ReviewDetailPage({ params }: PageProps) {
           <div className="border-t border-[#e0e0e0] p-4">
             <div className="text-xs text-[#6f6f6f]">Review provider</div>
             <div className="mt-1 flex items-center gap-2 text-sm font-medium">
-              <span className="h-2 w-2 rounded-full bg-[#24a148]" />
+              <span className="h-2 w-2 shrink-0 rounded-full bg-[#24a148]" />
               Local provider
             </div>
           </div>
         </aside>
 
         {/* Main */}
-        <section className="flex-1">
-          <header className="flex min-h-16 items-center justify-between border-b border-[#e0e0e0] bg-white px-6">
-            <div>
-              <div className="text-sm text-[#6f6f6f]">
-                Reviews / {review.id}
+        <section className="min-w-0 flex-1">
+          <header className="sticky top-0 z-10 border-b border-[#e0e0e0] bg-white">
+            <div className="flex min-h-16 flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between md:py-0">
+              <div className="min-w-0">
+                <div className="truncate text-xs text-[#6f6f6f] sm:text-sm">
+                  Reviews / {review.id}
+                </div>
+                <h1 className="mt-1 text-base font-semibold sm:text-lg">
+                  Review details
+                </h1>
               </div>
-              <h1 className="mt-1 text-lg font-semibold">Review details</h1>
+
+              <Link
+                href="/run"
+                className="inline-flex w-full shrink-0 items-center justify-center rounded-md bg-[#0f62fe] px-4 py-2 text-sm font-medium text-white hover:bg-[#0353e9] sm:w-auto"
+              >
+                Run Review
+              </Link>
             </div>
 
-            <Link
-              href="/run"
-              className="rounded-md bg-[#0f62fe] px-4 py-2 text-sm font-medium text-white hover:bg-[#0353e9]"
-            >
-              Run Review
-            </Link>
+            {/* Mobile navigation */}
+            <nav className="flex gap-1 overflow-x-auto border-t border-[#e0e0e0] px-3 py-2 lg:hidden">
+              <MobileNavLink href="/reviews" active>
+                Reviews
+              </MobileNavLink>
+
+              <MobileNavLink href="/findings">
+                Findings
+              </MobileNavLink>
+
+              <MobileNavLink href="/run">
+                Run Review
+              </MobileNavLink>
+
+              <MobileNavLink href="/settings">
+                Settings
+              </MobileNavLink>
+            </nav>
           </header>
 
-          <div className="mx-auto max-w-7xl space-y-6 p-6">
+          <div className="mx-auto w-full max-w-7xl space-y-5 p-4 sm:space-y-6 sm:p-6">
             {/* Review summary */}
-            <section className="rounded-lg border border-[#e0e0e0] bg-white">
-              <div className="border-b border-[#e0e0e0] px-6 py-5">
+            <section className="overflow-hidden rounded-lg border border-[#e0e0e0] bg-white">
+              <div className="border-b border-[#e0e0e0] px-4 py-4 sm:px-6 sm:py-5">
                 <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                  <div>
-                    <div className="mb-2 flex items-center gap-2">
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-medium ${
                           review.status === "COMPLETED"
@@ -146,32 +173,29 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-semibold">
+                    <h2 className="break-words text-lg font-semibold sm:text-xl">
                       {review.repository}
                     </h2>
 
-                    <p className="mt-1 font-mono text-xs text-[#6f6f6f]">
+                    <p className="mt-1 break-all font-mono text-xs text-[#6f6f6f]">
                       Revision: {review.revision}
                     </p>
                   </div>
 
-                  <div className="text-left md:text-right">
+                  <div className="min-w-0 text-left md:max-w-xs md:text-right">
                     <div className="text-xs text-[#6f6f6f]">Review ID</div>
-                    <div className="mt-1 font-mono text-xs text-[#393939]">
+                    <div className="mt-1 break-all font-mono text-xs text-[#393939]">
                       {review.id}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 divide-x divide-[#e0e0e0] md:grid-cols-4">
+              <div className="grid grid-cols-2 divide-x divide-y divide-[#e0e0e0] sm:grid-cols-4 sm:divide-y-0">
                 <Stat label="Findings" value={review.findings.length} />
                 <Stat label="Supported" value={supportedCount} />
                 <Stat label="Unsupported" value={unsupportedCount} />
-                <Stat
-                  label="Bob runs"
-                  value={review.bobRuns.length}
-                />
+                <Stat label="Bob runs" value={review.bobRuns.length} />
               </div>
             </section>
 
@@ -184,7 +208,7 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                 </p>
               </div>
 
-              <div className="grid gap-2 md:grid-cols-6">
+              <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
                 {[
                   "REVIEW FINDING",
                   "CODE REFERENCE",
@@ -195,14 +219,14 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                 ].map((step, index) => (
                   <div
                     key={step}
-                    className="relative rounded-md border border-[#e0e0e0] bg-white px-3 py-4 text-center"
+                    className="relative rounded-md border border-[#e0e0e0] bg-white px-3 py-3 text-center sm:py-4"
                   >
                     <div className="text-[11px] font-semibold tracking-wide text-[#525252]">
                       {step}
                     </div>
 
                     {index < 5 && (
-                      <div className="absolute -right-2 top-1/2 hidden -translate-y-1/2 bg-[#f8f9fa] px-1 text-[#8d8d8d] md:block">
+                      <div className="absolute -right-2 top-1/2 hidden -translate-y-1/2 bg-[#f8f9fa] px-1 text-[#8d8d8d] lg:block">
                         →
                       </div>
                     )}
@@ -212,17 +236,17 @@ export default async function ReviewDetailPage({ params }: PageProps) {
             </section>
 
             {/* Findings */}
-            <section className="rounded-lg border border-[#e0e0e0] bg-white">
-              <div className="border-b border-[#e0e0e0] px-6 py-4">
+            <section className="overflow-hidden rounded-lg border border-[#e0e0e0] bg-white">
+              <div className="border-b border-[#e0e0e0] px-4 py-4 sm:px-6">
                 <h2 className="text-sm font-semibold">Findings</h2>
-                <p className="mt-1 text-xs text-[#6f6f6f]">
+                <p className="mt-1 text-xs leading-5 text-[#6f6f6f]">
                   Findings generated by the current review provider and checked
                   against collected evidence.
                 </p>
               </div>
 
               {review.findings.length === 0 ? (
-                <div className="px-6 py-12 text-center">
+                <div className="px-4 py-10 text-center sm:px-6 sm:py-12">
                   <p className="text-sm font-medium">No findings</p>
                   <p className="mt-1 text-xs text-[#6f6f6f]">
                     The review did not produce any findings.
@@ -238,14 +262,14 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                       <Link
                         key={finding.id}
                         href={`/findings/${finding.id}`}
-                        className="block px-6 py-5 hover:bg-[#f8f9fa]"
+                        className="block px-4 py-5 hover:bg-[#f8f9fa] sm:px-6"
                       >
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
                               <SeverityBadge severity={finding.severity} />
 
-                              <span className="rounded-full bg-[#f4f4f4] px-2.5 py-1 text-xs font-medium text-[#525252]">
+                              <span className="max-w-full break-all rounded-full bg-[#f4f4f4] px-2.5 py-1 text-xs font-medium text-[#525252]">
                                 {finding.source}
                               </span>
 
@@ -262,20 +286,20 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                               )}
                             </div>
 
-                            <h3 className="mt-3 text-sm font-semibold">
+                            <h3 className="mt-3 break-words text-sm font-semibold">
                               {finding.title}
                             </h3>
 
-                            <p className="mt-1 max-w-3xl text-sm leading-6 text-[#525252]">
+                            <p className="mt-1 max-w-3xl break-words text-sm leading-6 text-[#525252]">
                               {finding.description}
                             </p>
 
-                            <div className="mt-3 font-mono text-xs text-[#6f6f6f]">
+                            <div className="mt-3 break-all font-mono text-xs text-[#6f6f6f]">
                               {finding.filePath}:{finding.startLine}
                             </div>
                           </div>
 
-                          <div className="shrink-0 lg:text-right">
+                          <div className="min-w-0 shrink-0 border-t border-[#f0f0f0] pt-3 lg:border-t-0 lg:pt-0 lg:text-right">
                             <div className="text-xs text-[#6f6f6f]">
                               Decision
                             </div>
@@ -298,8 +322,8 @@ export default async function ReviewDetailPage({ params }: PageProps) {
             </section>
 
             {/* Bob run */}
-            <section className="rounded-lg border border-[#e0e0e0] bg-white">
-              <div className="border-b border-[#e0e0e0] px-6 py-4">
+            <section className="overflow-hidden rounded-lg border border-[#e0e0e0] bg-white">
+              <div className="border-b border-[#e0e0e0] px-4 py-4 sm:px-6">
                 <h2 className="text-sm font-semibold">Provider run</h2>
               </div>
 
@@ -307,10 +331,10 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                 {review.bobRuns.map((run) => (
                   <div
                     key={run.id}
-                    className="flex flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between"
+                    className="flex min-w-0 flex-col gap-2 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between"
                   >
-                    <div>
-                      <div className="font-mono text-xs text-[#393939]">
+                    <div className="min-w-0">
+                      <div className="break-all font-mono text-xs text-[#393939]">
                         {run.id}
                       </div>
                       <div className="mt-1 text-xs text-[#6f6f6f]">
@@ -318,7 +342,7 @@ export default async function ReviewDetailPage({ params }: PageProps) {
                       </div>
                     </div>
 
-                    <span className="rounded-full bg-[#defbe6] px-2.5 py-1 text-xs font-medium text-[#0e6027]">
+                    <span className="w-fit shrink-0 rounded-full bg-[#defbe6] px-2.5 py-1 text-xs font-medium text-[#0e6027]">
                       {run.status}
                     </span>
                   </div>
@@ -340,7 +364,7 @@ function Stat({
   value: number;
 }) {
   return (
-    <div className="px-6 py-4">
+    <div className="px-4 py-4 sm:px-6">
       <div className="text-xs text-[#6f6f6f]">{label}</div>
       <div className="mt-1 text-xl font-semibold">{value}</div>
     </div>
@@ -363,5 +387,28 @@ function SeverityBadge({ severity }: { severity: string }) {
     <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${classes}`}>
       {normalized}
     </span>
+  );
+}
+
+function MobileNavLink({
+  href,
+  children,
+  active = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`shrink-0 rounded-md px-3 py-2 text-xs font-medium ${
+        active
+          ? "bg-[#e8f0fe] text-[#0f62fe]"
+          : "text-[#525252] hover:bg-[#f4f4f4]"
+      }`}
+    >
+      {children}
+    </Link>
   );
 }

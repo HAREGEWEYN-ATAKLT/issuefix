@@ -1,33 +1,12 @@
-// import "dotenv/config";
-// import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-// import { PrismaClient } from "../generated/prisma/client";
-
-// const connectionString = process.env.DATABASE_URL!;
-
-// const adapter = new PrismaBetterSqlite3({
-//   url: connectionString,
-// });
-
-// const globalForPrisma = globalThis as unknown as {
-//   prisma: PrismaClient | undefined;
-// };
-
-// export const prisma =
-//   globalForPrisma.prisma ??
-//   new PrismaClient({ adapter });
-
-// if (process.env.NODE_ENV !== "production") {
-//   globalForPrisma.prisma = prisma;
-// }
 
 import "dotenv/config";
 
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaPostgresAdapter } from "@prisma/adapter-ppg";
 import { PrismaClient } from "../generated/prisma/client";
 
 const connectionString = process.env.DATABASE_URL!;
 
-const adapter = new PrismaPg({
+const adapter = new PrismaPostgresAdapter({
   connectionString,
 });
 

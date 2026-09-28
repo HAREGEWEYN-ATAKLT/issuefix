@@ -1,163 +1,4 @@
-
-
-// import { NextResponse } from "next/server";
-// import { prisma } from "@/lib/prisma";
-// import { LocalReviewProvider } from "@/lib/review/local-provider";
-// import { collectEvidence } from "@/lib/evidence/collector";
-// import { verifyFinding } from "@/lib/verification/engine";
-// import { evaluatePolicy } from "@/lib/policy/engine";
-// type RunReviewRequest = {
-//   repositoryPath: string;
-//   revision?: string;
-//   reviewType?: string;
-// };
-
-// export async function POST(request: Request) {
-//   try {
-//     const body = (await request.json()) as RunReviewRequest;
-
-//     if (!body.repositoryPath) {
-//       return NextResponse.json(
-//         { error: "repositoryPath is required" },
-//         { status: 400 }
-//       );
-//     }
-
-//     const revision = body.revision ?? "local";
-//     const reviewType = body.reviewType ?? "security";
-
-//     const review = await prisma.review.create({
-//       data: {
-//         repository: body.repositoryPath,
-//         revision,
-//         reviewType,
-//         status: "RUNNING",
-//       },
-//     });
-
-//     try {
-//       const bobRun = await prisma.bobRun.create({
-//         data: {
-//           reviewId: review.id,
-//           status: "RUNNING",
-//         },
-//       });
-
-//       const provider = new LocalReviewProvider();
-
-//       const report = await provider.runReview({
-//         repositoryPath: body.repositoryPath,
-//         revision,
-//         reviewType,
-//       });
-
-//       await prisma.$transaction(async (tx) => {
-//         for (const finding of report.findings) {
-//           const evidence = await collectEvidence(
-//             body.repositoryPath,
-//             finding
-//           );
-
-//           const verification = verifyFinding({
-//             title: finding.title,
-//             severity: finding.severity,
-//             filePath: finding.filePath,
-//             startLine: finding.startLine,
-//             evidences: evidence,
-//           });
-
-//           await tx.finding.create({
-//             data: {
-//               reviewId: review.id,
-//               title: finding.title,
-//               description: finding.description,
-//               severity: finding.severity,
-//               source: finding.source,
-//               filePath: finding.filePath,
-//               startLine: finding.startLine,
-//               endLine: finding.endLine,
-//               symbol: finding.symbol,
-
-//               evidences: {
-//                 create: evidence.map((item) => ({
-//                   type: item.type,
-//                   source: item.source,
-//                   location: item.location,
-//                   status: item.status,
-//                   description: item.description,
-//                 })),
-//               },
-
-//               verification: {
-//                 create: {
-//                   result: verification.result,
-//                   reason: verification.reason,
-//                 },
-//               },
-//             },
-//           });
-//         }
-
-//         await tx.bobRun.update({
-//           where: {
-//             id: bobRun.id,
-//           },
-//           data: {
-//             status: "COMPLETED",
-//             finishedAt: new Date(),
-//             rawOutput: report.rawOutput,
-//           },
-//         });
-
-//         await tx.review.update({
-//           where: {
-//             id: review.id,
-//           },
-//           data: {
-//             status: "COMPLETED",
-//             completedAt: new Date(),
-//           },
-//         });
-//       });
-
-//       return NextResponse.json(
-//         {
-//           reviewId: review.id,
-//           status: "COMPLETED",
-//           findings: report.findings.length,
-//         },
-//         { status: 201 }
-//       );
-//     } catch (error) {
-//       console.error("Review execution failed:", error);
-
-//       await prisma.review.update({
-//         where: {
-//           id: review.id,
-//         },
-//         data: {
-//           status: "FAILED",
-//         },
-//       });
-
-//       return NextResponse.json(
-//         {
-//           reviewId: review.id,
-//           error: "Review execution failed",
-//         },
-//         { status: 500 }
-//       );
-//     }
-//   } catch (error) {
-//     console.error("Invalid review request:", error);
-
-//     return NextResponse.json(
-//       { error: "Invalid request" },
-//       { status: 400 }
-//     );
-//   }
-// }
-
+import path from "path";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { LocalReviewProvider } from "@/lib/review/local-provider";
@@ -184,6 +25,10 @@ export async function POST(request: Request) {
 
     const revision = body.revision ?? "local";
     const reviewType = body.reviewType ?? "security";
+const resolvedRepositoryPath =
+  body.repositoryPath === "sample-payment-service"
+    ? path.join(process.cwd(), "sample-payment-service")
+    : body.repositoryPath;
 
     const review = await prisma.review.create({
       data: {
@@ -204,19 +49,18 @@ export async function POST(request: Request) {
 
       const provider = new LocalReviewProvider();
 
-      const report = await provider.runReview({
-        repositoryPath: body.repositoryPath,
-        revision,
-        reviewType,
-      });
-
+    const report = await provider.runReview({
+  repositoryPath: resolvedRepositoryPath,
+  revision,
+  reviewType,
+});
       await prisma.$transaction(async (tx) => {
         for (const finding of report.findings) {
           // 1. Collect evidence
-          const evidence = await collectEvidence(
-            body.repositoryPath,
-            finding
-          );
+         const evidence = await collectEvidence(
+  resolvedRepositoryPath,
+  finding
+);
 
           // 2. Verify the finding against the evidence
           const verification = verifyFinding({

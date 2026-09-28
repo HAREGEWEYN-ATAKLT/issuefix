@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from "next/link";
@@ -31,15 +30,16 @@ export default function Home() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-const findings = reviews.flatMap((review) => review.findings);
 
-const supportedCount = findings.filter(
-  (finding) => finding.verification?.result === "SUPPORTED"
-).length;
+  const findings = reviews.flatMap((review) => review.findings);
 
-const blockedCount = findings.filter(
-  (finding) => finding.decision?.result === "BLOCK"
-).length;
+  const supportedCount = findings.filter(
+    (finding) => finding.verification?.result === "SUPPORTED"
+  ).length;
+
+  const blockedCount = findings.filter(
+    (finding) => finding.decision?.result === "BLOCK"
+  ).length;
 
   useEffect(() => {
     async function loadReviews() {
@@ -66,36 +66,43 @@ const blockedCount = findings.filter(
   return (
     <main className="min-h-screen bg-[#f4f7fb] text-[#172b4d]">
       {/* Header */}
-      <header className="h-[68px] border-b border-[#d9e2ec] bg-white">
-        <div className="flex h-full items-center justify-between px-7">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0f62fe] text-sm font-bold text-white shadow-sm">
+      <header className="sticky top-0 z-30 h-auto min-h-[68px] border-b border-[#d9e2ec] bg-white">
+        <div className="flex min-h-[68px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-7">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0f62fe] text-sm font-bold text-white shadow-sm">
               IF
             </div>
 
-            <div>
+            <div className="min-w-0">
               <div className="text-[16px] font-bold tracking-tight text-[#102a43]">
                 IssueFix
               </div>
 
-              <div className="text-[11px] font-medium text-[#829ab1]">
+              <div className="hidden text-[11px] font-medium text-[#829ab1] sm:block">
                 AI CODE REVIEW • EVIDENCE • VERIFICATION
               </div>
             </div>
           </div>
-           </div>
+        </div>
+
+        {/* Mobile navigation */}
+        <nav className="flex gap-2 overflow-x-auto border-t border-[#edf2f7] px-4 py-2 lg:hidden">
+          <MobileNavLink href="/reviews" label="Reviews" active />
+          <MobileNavLink href="/findings" label="Findings" />
+          <MobileNavLink href="/run" label="Run Review" />
+          <MobileNavLink href="/settings" label="Settings" />
+        </nav>
       </header>
 
       <div className="flex min-h-[calc(100vh-68px)]">
-        {/* Sidebar */}
-        <aside className="relative w-[245px] shrink-0 border-r border-[#d9e2ec] bg-white/75 text-[#334e68] shadow-[4px_0_20px_rgba(16,42,67,0.04)] backdrop-blur-xl">
+        {/* Desktop Sidebar */}
+        <aside className="relative hidden w-[245px] shrink-0 border-r border-[#d9e2ec] bg-white/75 text-[#334e68] shadow-[4px_0_20px_rgba(16,42,67,0.04)] backdrop-blur-xl lg:flex lg:flex-col">
           <div className="p-5">
             <div className="mb-4 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-[#829ab1]">
               Workspace
             </div>
 
             <nav className="space-y-1.5">
-              {/* Reviews */}
               <Link
                 href="/reviews"
                 className="flex items-center gap-3 rounded-lg border border-[#cfe0f5] bg-[#edf4ff] px-4 py-3 text-sm font-semibold text-[#0f62fe] shadow-sm"
@@ -106,7 +113,6 @@ const blockedCount = findings.filter(
                 Reviews
               </Link>
 
-              {/* Findings */}
               <Link
                 href="/findings"
                 className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-[#486581] transition hover:bg-[#f1f5f9] hover:text-[#102a43]"
@@ -117,7 +123,6 @@ const blockedCount = findings.filter(
                 Findings
               </Link>
 
-              {/* Run Review */}
               <Link
                 href="/run"
                 className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-[#486581] transition hover:bg-[#f1f5f9] hover:text-[#102a43]"
@@ -135,7 +140,6 @@ const blockedCount = findings.filter(
               Configuration
             </div>
 
-            {/* Settings */}
             <Link
               href="/settings"
               className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-[#486581] transition hover:bg-[#f1f5f9] hover:text-[#102a43]"
@@ -163,8 +167,8 @@ const blockedCount = findings.filter(
         </aside>
 
         {/* Main */}
-        <section className="flex-1 overflow-auto">
-          <div className="mx-auto max-w-[1400px] px-8 py-8">
+        <section className="min-w-0 flex-1 overflow-x-hidden">
+          <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
             {/* Breadcrumb */}
             <div className="mb-5 flex items-center gap-2 text-xs font-medium">
               <span className="text-[#829ab1]">Workspace</span>
@@ -173,28 +177,28 @@ const blockedCount = findings.filter(
             </div>
 
             {/* Heading */}
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-[30px] font-bold tracking-tight text-[#102a43]">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h1 className="text-[28px] font-bold tracking-tight text-[#102a43] sm:text-[30px]">
                   Reviews
                 </h1>
 
                 <p className="mt-2 max-w-2xl text-[14px] leading-6 text-[#627d98]">
-                  Inspect review findings and verify every claim
-                  against inspectable engineering evidence.
+                  Inspect review findings and verify every claim against
+                  inspectable engineering evidence.
                 </p>
               </div>
 
               <Link
                 href="/run"
-                className="rounded-lg bg-[#0f62fe] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-blue-200 transition hover:bg-[#0353e9] hover:shadow-lg"
+                className="inline-flex w-full items-center justify-center rounded-lg bg-[#0f62fe] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-blue-200 transition hover:bg-[#0353e9] hover:shadow-lg sm:w-auto"
               >
                 + Run Review
               </Link>
             </div>
 
             {/* Stats */}
-            <div className="mt-8 grid grid-cols-4 gap-5">
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard
                 label="Total Reviews"
                 value={loading ? "..." : String(reviews.length)}
@@ -206,7 +210,7 @@ const blockedCount = findings.filter(
 
               <StatCard
                 label="Review Findings"
-               value={loading ? "..." : String(findings.length)}
+                value={loading ? "..." : String(findings.length)}
                 description="Issues identified"
                 icon="!"
                 iconBg="bg-[#f1edff]"
@@ -224,7 +228,7 @@ const blockedCount = findings.filter(
 
               <StatCard
                 label="Blocked"
-               value={loading ? "..." : String(blockedCount)}
+                value={loading ? "..." : String(blockedCount)}
                 description="Policy violations"
                 icon="!"
                 iconBg="bg-[#fff0f0]"
@@ -241,7 +245,7 @@ const blockedCount = findings.filter(
 
             {/* Recent Reviews */}
             <div className="mt-6 overflow-hidden rounded-xl border border-[#d9e2ec] bg-white shadow-sm">
-              <div className="flex items-center justify-between border-b border-[#e8eef4] px-6 py-5">
+              <div className="flex flex-col gap-3 border-b border-[#e8eef4] px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
                   <h2 className="text-[15px] font-bold text-[#102a43]">
                     Recent Reviews
@@ -252,13 +256,13 @@ const blockedCount = findings.filter(
                   </p>
                 </div>
 
-                <div className="rounded-md border border-[#d9e2ec] bg-[#f8fafc] px-3 py-1.5 text-xs font-medium text-[#627d98]">
+                <div className="w-fit rounded-md border border-[#d9e2ec] bg-[#f8fafc] px-3 py-1.5 text-xs font-medium text-[#627d98]">
                   {loading ? "Loading..." : `${reviews.length} reviews`}
                 </div>
               </div>
 
               {loading ? (
-                <div className="flex min-h-[280px] items-center justify-center text-sm text-[#829ab1]">
+                <div className="flex min-h-[280px] items-center justify-center px-4 text-center text-sm text-[#829ab1]">
                   Loading reviews...
                 </div>
               ) : reviews.length === 0 ? (
@@ -290,11 +294,11 @@ const blockedCount = findings.filter(
                     <Link
                       key={review.id}
                       href={`/reviews/${review.id}`}
-                      className="block px-6 py-5 transition hover:bg-[#f8fafc]"
+                      className="block px-4 py-5 transition hover:bg-[#f8fafc] sm:px-6"
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-sm font-semibold text-[#102a43]">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0">
+                          <div className="break-words text-sm font-semibold text-[#102a43]">
                             {review.repository}
                           </div>
 
@@ -303,7 +307,7 @@ const blockedCount = findings.filter(
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex shrink-0 flex-wrap items-center gap-3">
                           <span className="text-xs font-medium text-[#627d98]">
                             {review.status}
                           </span>
@@ -331,7 +335,7 @@ const blockedCount = findings.filter(
                 </p>
               </div>
 
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <ProcessCard
                   number="01"
                   title="Review Finding"
@@ -363,7 +367,7 @@ const blockedCount = findings.filter(
             </div>
 
             {/* Status legend */}
-            <div className="mt-6 flex items-center gap-6 rounded-lg border border-[#d9e2ec] bg-white px-5 py-4 shadow-sm">
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-lg border border-[#d9e2ec] bg-white px-4 py-4 shadow-sm sm:px-5">
               <span className="text-xs font-semibold text-[#486581]">
                 Decision status
               </span>
@@ -382,6 +386,29 @@ const blockedCount = findings.filter(
 
 /* ---------- Small UI components ---------- */
 
+function MobileNavLink({
+  href,
+  label,
+  active = false,
+}: {
+  href: string;
+  label: string;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`shrink-0 rounded-md px-3 py-2 text-xs font-semibold transition ${
+        active
+          ? "bg-[#edf4ff] text-[#0f62fe]"
+          : "text-[#627d98] hover:bg-[#f1f5f9] hover:text-[#102a43]"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+}
+
 function PipelineItem({
   number,
   text,
@@ -391,7 +418,7 @@ function PipelineItem({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#edf4ff] text-[9px] font-bold text-[#0f62fe]">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#edf4ff] text-[9px] font-bold text-[#0f62fe]">
         {number}
       </span>
 
@@ -416,9 +443,9 @@ function StatCard({
   iconText: string;
 }) {
   return (
-    <div className="rounded-xl border border-[#d9e2ec] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <div>
+    <div className="rounded-xl border border-[#d9e2ec] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <p className="text-xs font-semibold text-[#627d98]">{label}</p>
 
           <p className="mt-3 text-[28px] font-bold tracking-tight text-[#102a43]">
@@ -429,7 +456,7 @@ function StatCard({
         </div>
 
         <div
-          className={`flex h-10 w-10 items-center justify-center rounded-lg ${iconBg} ${iconText} text-sm font-bold`}
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${iconBg} ${iconText} text-sm font-bold`}
         >
           {icon}
         </div>
@@ -500,11 +527,8 @@ function Status({
 }) {
   return (
     <div className="flex items-center gap-2 text-[10px] font-bold text-[#627d98]">
-      <span className={`h-2 w-2 rounded-full ${color}`} />
+      <span className={`h-2 w-2 shrink-0 rounded-full ${color}`} />
       {label}
     </div>
   );
 }
-
-
-

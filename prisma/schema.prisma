@@ -8,47 +8,44 @@ datasource db {
 }
 
 model Review {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   repository  String
   revision    String
   reviewType  String
-  status      String   @default("RUNNING")
-  createdAt   DateTime @default(now())
+  status      String    @default("RUNNING")
+  createdAt   DateTime  @default(now())
   completedAt DateTime?
-
-  bobRuns   BobRun[]
-  findings  Finding[]
+  bobRuns     BobRun[]
+  findings    Finding[]
 }
 
 model BobRun {
-  id        String   @id @default(cuid())
-  reviewId  String
-  status    String   @default("RUNNING")
-  startedAt DateTime @default(now())
+  id         String    @id @default(cuid())
+  reviewId   String
+  status     String    @default("RUNNING")
+  startedAt  DateTime  @default(now())
   finishedAt DateTime?
-  rawOutput String?
-
-  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  rawOutput  String?
+  review     Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Finding {
-  id          String   @id @default(cuid())
-  reviewId    String
-  title       String
-  description String
-  severity    String
-  source      String
-  filePath    String
-  startLine   Int
-  endLine     Int?
-  symbol      String?
-  status      String   @default("OPEN")
-  createdAt   DateTime @default(now())
-
-  review       Review        @relation(fields: [reviewId], references: [id], onDelete: Cascade)
-  evidences    Evidence[]
-  verification Verification?
+  id           String        @id @default(cuid())
+  reviewId     String
+  title        String
+  description  String
+  severity     String
+  source       String
+  filePath     String
+  startLine    Int
+  endLine      Int?
+  symbol       String?
+  status       String        @default("OPEN")
+  createdAt    DateTime      @default(now())
   decision     Decision?
+  evidences    Evidence[]
+  review       Review        @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  verification Verification?
 }
 
 model Evidence {
@@ -60,8 +57,7 @@ model Evidence {
   status      String
   description String
   createdAt   DateTime @default(now())
-
-  finding Finding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  finding     Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
 }
 
 model Verification {
@@ -70,29 +66,26 @@ model Verification {
   result     String
   reason     String
   verifiedAt DateTime @default(now())
-
-  finding Finding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  finding    Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
 }
 
 model Policy {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   name      String
   version   String
   rules     String
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now())
   decisions Decision[]
 }
 
 model Decision {
-  id         String   @id @default(cuid())
-  findingId  String   @unique
-  policyId   String
-  result     String
-  reason     String
-  createdAt  DateTime @default(now())
-
-  finding Finding @relation(fields: [findingId], references: [id], onDelete: Cascade)
-  policy  Policy  @relation(fields: [policyId], references: [id])
+  id        String   @id @default(cuid())
+  findingId String   @unique
+  policyId  String
+  result    String
+  reason    String
+  createdAt DateTime @default(now())
+  finding   Finding  @relation(fields: [findingId], references: [id], onDelete: Cascade)
+  policy    Policy   @relation(fields: [policyId], references: [id])
 }

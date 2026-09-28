@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -91,10 +92,10 @@ export default async function FindingDetailPage({ params }: PageProps) {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 text-slate-900">
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="hidden w-64 border-r border-slate-200 bg-white lg:flex lg:flex-col">
+        <aside className="hidden w-64 shrink-0 border-r border-slate-200 bg-white lg:flex lg:flex-col">
           <div className="border-b border-slate-200 px-6 py-5">
             <div className="text-lg font-semibold tracking-tight">
               IssueFix
@@ -139,7 +140,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
           <div className="border-t border-slate-200 p-4">
             <div className="text-xs text-slate-500">Review provider</div>
             <div className="mt-1 flex items-center gap-2 text-sm">
-              <span className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="h-2 w-2 shrink-0 rounded-full bg-green-500" />
               Local analyzer
             </div>
           </div>
@@ -148,7 +149,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
         {/* Main */}
         <main className="min-w-0 flex-1">
           <header className="border-b border-slate-200 bg-white">
-            <div className="px-6 py-5">
+            <div className="px-4 py-4 sm:px-6 sm:py-5">
               <Link
                 href="/findings"
                 className="text-xs font-medium text-slate-500 hover:text-slate-900"
@@ -156,85 +157,105 @@ export default async function FindingDetailPage({ params }: PageProps) {
                 ← Back to findings
               </Link>
 
-              <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                <div>
+              <div className="mt-3 flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="text-xl font-semibold tracking-tight">
+                    <h1 className="break-words text-lg font-semibold tracking-tight sm:text-xl">
                       {finding.title}
                     </h1>
 
-                  <span
-  className={`rounded border px-2 py-0.5 text-[11px] font-semibold uppercase ${badgeClass(
-    finding.severity.toUpperCase()
-  )}`}
->
-  {finding.severity}
-</span>
+                    <span
+                      className={`rounded border px-2 py-0.5 text-[11px] font-semibold uppercase ${badgeClass(
+                        finding.severity.toUpperCase()
+                      )}`}
+                    >
+                      {finding.severity}
+                    </span>
 
-{finding.verification && (
-  <>
-    <span className="text-xs text-slate-400">·</span>
-    <span
-      className={`rounded border px-2 py-0.5 text-[11px] font-semibold ${badgeClass(
-        finding.verification.result
-      )}`}
-    >
-      {finding.verification.result}
-    </span>
-  </>
-)}
+                    {finding.verification && (
+                      <>
+                        <span className="text-xs text-slate-400">·</span>
+                        <span
+                          className={`rounded border px-2 py-0.5 text-[11px] font-semibold ${badgeClass(
+                            finding.verification.result
+                          )}`}
+                        >
+                          {finding.verification.result}
+                        </span>
+                      </>
+                    )}
 
-{finding.decision && (
-  <>
-    <span className="text-xs text-slate-400">·</span>
-    <span
-      className={`rounded border px-2 py-0.5 text-[11px] font-semibold ${badgeClass(
-        finding.decision.result
-      )}`}
-    >
-      {finding.decision.result}
-    </span>
-  </>
-)}
+                    {finding.decision && (
+                      <>
+                        <span className="text-xs text-slate-400">·</span>
+                        <span
+                          className={`rounded border px-2 py-0.5 text-[11px] font-semibold ${badgeClass(
+                            finding.decision.result
+                          )}`}
+                        >
+                          {finding.decision.result}
+                        </span>
+                      </>
+                    )}
                   </div>
 
-                  <p className="mt-2 max-w-3xl text-sm text-slate-600">
+                  <p className="mt-2 max-w-3xl break-words text-sm leading-6 text-slate-600">
                     {finding.description}
                   </p>
                 </div>
 
-                <div className="text-right text-xs text-slate-500">
-                  <div className="font-mono">
+                <div className="min-w-0 text-left text-xs text-slate-500 lg:max-w-xs lg:text-right">
+                  <div className="break-all font-mono">
                     {finding.filePath}:{finding.startLine}
                   </div>
+
                   {finding.symbol && (
-                    <div className="mt-1">{finding.symbol}</div>
+                    <div className="mt-1 break-words">{finding.symbol}</div>
                   )}
                 </div>
               </div>
             </div>
+
+            {/* Mobile navigation */}
+            <nav className="flex gap-1 overflow-x-auto border-t border-slate-200 px-3 py-2 lg:hidden">
+              <MobileNavLink href="/reviews">
+                Reviews
+              </MobileNavLink>
+
+              <MobileNavLink href="/findings" active>
+                Findings
+              </MobileNavLink>
+
+              <MobileNavLink href="/run">
+                Run Review
+              </MobileNavLink>
+
+              <MobileNavLink href="/settings">
+                Settings
+              </MobileNavLink>
+            </nav>
           </header>
 
-          <div className="space-y-6 p-6">
+          <div className="space-y-5 p-4 sm:space-y-6 sm:p-6">
             {/* Evidence chain */}
-            <section className="rounded-lg border border-slate-200 bg-white">
-              <div className="border-b border-slate-200 px-5 py-4">
+            <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
                 <h2 className="text-sm font-semibold">Evidence chain</h2>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs leading-5 text-slate-500">
                   How IssueFix moves from an AI finding to an engineering
                   decision.
                 </p>
               </div>
 
-              <div className="grid gap-px bg-slate-200 md:grid-cols-5">
+              <div className="grid gap-px bg-slate-200 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                 <div className="bg-white p-4">
                   <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                     01
                   </div>
                   <div className="mt-2 text-sm font-semibold">
-                   Review Finding
+                    Review Finding
                   </div>
-                  <div className="mt-1 text-xs text-slate-500">
+                  <div className="mt-1 break-words text-xs text-slate-500">
                     {finding.source}
                   </div>
                 </div>
@@ -246,7 +267,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
                   <div className="mt-2 text-sm font-semibold">
                     Code Reference
                   </div>
-                  <div className="mt-1 font-mono text-xs text-slate-500">
+                  <div className="mt-1 break-all font-mono text-xs text-slate-500">
                     {finding.filePath}:{finding.startLine}
                   </div>
                 </div>
@@ -286,22 +307,22 @@ export default async function FindingDetailPage({ params }: PageProps) {
             </section>
 
             {/* Source code */}
-            <section className="rounded-lg border border-slate-200 bg-white">
-              <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-                <div>
+            <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+              <div className="flex flex-col gap-2 border-b border-slate-200 px-4 py-4 sm:px-5">
+                <div className="min-w-0">
                   <h2 className="text-sm font-semibold">Code reference</h2>
-                  <p className="mt-1 font-mono text-xs text-slate-500">
+                  <p className="mt-1 break-all font-mono text-xs text-slate-500">
                     {finding.filePath}:{finding.startLine}
                   </p>
                 </div>
               </div>
 
               {sourceCode ? (
-                <div className="overflow-x-auto bg-slate-950 p-4">
-                  <pre className="text-sm leading-6 text-slate-200">
+                <div className="overflow-x-auto bg-slate-950 p-3 sm:p-4">
+                  <pre className="min-w-max text-xs leading-6 text-slate-200 sm:text-sm">
                     {sourceCode.map((line) => (
                       <div key={line.number} className="flex">
-                        <span className="mr-5 inline-block w-8 select-none text-right text-slate-500">
+                        <span className="mr-4 inline-block w-8 shrink-0 select-none text-right text-slate-500 sm:mr-5">
                           {line.number}
                         </span>
                         <code>{line.code || " "}</code>
@@ -310,7 +331,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
                   </pre>
                 </div>
               ) : (
-                <div className="p-5 text-sm text-slate-500">
+                <div className="p-4 text-sm leading-6 text-slate-500 sm:p-5">
                   Code reference unavailable. The repository file could not be
                   read.
                 </div>
@@ -318,23 +339,23 @@ export default async function FindingDetailPage({ params }: PageProps) {
             </section>
 
             {/* Evidence */}
-            <section className="rounded-lg border border-slate-200 bg-white">
-              <div className="border-b border-slate-200 px-5 py-4">
+            <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
                 <h2 className="text-sm font-semibold">Collected evidence</h2>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs leading-5 text-slate-500">
                   Evidence collected from the repository and analysis tools.
                 </p>
               </div>
 
               <div className="divide-y divide-slate-200">
                 {finding.evidences.map((evidence) => (
-                  <div key={evidence.id} className="px-5 py-4">
+                  <div key={evidence.id} className="px-4 py-4 sm:px-5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                      <span className="max-w-full break-all rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
                         {evidence.type}
                       </span>
 
-                      <span className="text-xs text-slate-500">
+                      <span className="break-words text-xs text-slate-500">
                         {evidence.source}
                       </span>
 
@@ -349,12 +370,12 @@ export default async function FindingDetailPage({ params }: PageProps) {
                       </span>
                     </div>
 
-                    <p className="mt-2 text-sm text-slate-700">
+                    <p className="mt-2 break-words text-sm leading-6 text-slate-700">
                       {evidence.description}
                     </p>
 
                     {evidence.location && (
-                      <p className="mt-1 font-mono text-xs text-slate-500">
+                      <p className="mt-1 break-all font-mono text-xs text-slate-500">
                         {evidence.location}
                       </p>
                     )}
@@ -364,13 +385,13 @@ export default async function FindingDetailPage({ params }: PageProps) {
             </section>
 
             {/* Verification + policy */}
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
               <section className="rounded-lg border border-slate-200 bg-white">
-                <div className="border-b border-slate-200 px-5 py-4">
+                <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
                   <h2 className="text-sm font-semibold">Verification</h2>
                 </div>
 
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   <div className="flex items-center gap-2">
                     <span
                       className={`rounded border px-2.5 py-1 text-xs font-semibold ${badgeClass(
@@ -381,7 +402,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
                     </span>
                   </div>
 
-                  <p className="mt-4 text-sm leading-6 text-slate-600">
+                  <p className="mt-4 break-words text-sm leading-6 text-slate-600">
                     {finding.verification?.reason ??
                       "This finding has not been verified yet."}
                   </p>
@@ -389,11 +410,11 @@ export default async function FindingDetailPage({ params }: PageProps) {
               </section>
 
               <section className="rounded-lg border border-slate-200 bg-white">
-                <div className="border-b border-slate-200 px-5 py-4">
+                <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
                   <h2 className="text-sm font-semibold">Policy decision</h2>
                 </div>
 
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   <div className="flex items-center gap-2">
                     <span
                       className={`rounded border px-2.5 py-1 text-xs font-semibold ${badgeClass(
@@ -404,7 +425,7 @@ export default async function FindingDetailPage({ params }: PageProps) {
                     </span>
                   </div>
 
-                  <p className="mt-4 text-sm leading-6 text-slate-600">
+                  <p className="mt-4 break-words text-sm leading-6 text-slate-600">
                     {finding.decision?.reason ??
                       "No policy decision has been recorded."}
                   </p>
@@ -425,5 +446,28 @@ export default async function FindingDetailPage({ params }: PageProps) {
         </main>
       </div>
     </div>
+  );
+}
+
+function MobileNavLink({
+  href,
+  children,
+  active = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  active?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`shrink-0 rounded-md px-3 py-2 text-xs font-medium ${
+        active
+          ? "bg-slate-100 text-slate-900"
+          : "text-slate-600 hover:bg-slate-100"
+      }`}
+    >
+      {children}
+    </Link>
   );
 }

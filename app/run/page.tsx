@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -5,7 +6,7 @@ import { FormEvent, useState } from "react";
 
 export default function RunReviewPage() {
   const [repositoryPath, setRepositoryPath] = useState(
-    "C:\\Users\\Hp\\Desktop\\IBM-Bob-Hackathon\\issuefix\\sample-payment-service"
+    "sample-payment-service"
   );
   const [revision, setRevision] = useState("local");
   const [reviewType, setReviewType] = useState("security");
@@ -57,36 +58,69 @@ export default function RunReviewPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f7fb] text-[#172b4d]">
+    <main className="min-h-screen overflow-x-hidden bg-[#f4f7fb] text-[#172b4d]">
       {/* Header */}
-      <header className="h-[68px] border-b border-[#d9e2ec] bg-white">
-        <div className="flex h-full items-center justify-between px-7">
-          <Link href="/reviews" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0f62fe] text-sm font-bold text-white shadow-sm">
+      <header className="border-b border-[#d9e2ec] bg-white">
+        <div className="flex min-h-[68px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-7">
+          <Link href="/reviews" className="flex min-w-0 items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0f62fe] text-sm font-bold text-white shadow-sm">
               IF
             </div>
 
-            <div>
+            <div className="min-w-0">
               <div className="text-[16px] font-bold tracking-tight text-[#102a43]">
                 IssueFix
               </div>
 
-              <div className="text-[11px] font-medium text-[#829ab1]">
+              <div className="truncate text-[10px] font-medium text-[#829ab1] sm:text-[11px]">
                 AI CODE REVIEW • EVIDENCE • VERIFICATION
               </div>
             </div>
           </Link>
 
-          {/* Bob status */}
-          <div className="flex items-center gap-3 rounded-lg border border-[#d9e2ec] bg-[#f8fafc] px-4 py-2">
+          {/* Provider indicator */}
+          <div className="flex shrink-0 items-center gap-3 rounded-lg border border-[#d9e2ec] bg-[#f8fafc] px-3 py-2 sm:px-4">
             <span className="h-2.5 w-2.5 rounded-full bg-[#94a3b8]" />
           </div>
         </div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-68px)]">
+      <div className="flex min-h-[calc(100vh-68px)] flex-col lg:flex-row">
+        {/* Mobile navigation */}
+        <nav className="border-b border-[#d9e2ec] bg-white lg:hidden">
+          <div className="flex gap-2 overflow-x-auto px-4 py-3">
+            <Link
+              href="/reviews"
+              className="shrink-0 rounded-lg px-4 py-2 text-sm font-medium text-[#486581] hover:bg-[#f1f5f9]"
+            >
+              Reviews
+            </Link>
+
+            <Link
+              href="/findings"
+              className="shrink-0 rounded-lg px-4 py-2 text-sm font-medium text-[#486581] hover:bg-[#f1f5f9]"
+            >
+              Findings
+            </Link>
+
+            <Link
+              href="/run"
+              className="shrink-0 rounded-lg bg-[#edf4ff] px-4 py-2 text-sm font-semibold text-[#0f62fe]"
+            >
+              Run Review
+            </Link>
+
+            <Link
+              href="/settings"
+              className="shrink-0 rounded-lg px-4 py-2 text-sm font-medium text-[#486581] hover:bg-[#f1f5f9]"
+            >
+              Settings
+            </Link>
+          </div>
+        </nav>
+
         {/* Sidebar */}
-        <aside className="w-[245px] shrink-0 border-r border-[#d9e2ec] bg-white">
+        <aside className="hidden w-[245px] shrink-0 border-r border-[#d9e2ec] bg-white lg:block">
           <div className="p-5">
             <div className="mb-4 px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-[#829ab1]">
               Workspace
@@ -143,8 +177,8 @@ export default function RunReviewPage() {
         </aside>
 
         {/* Main */}
-        <section className="flex-1 overflow-auto">
-          <div className="mx-auto max-w-[1100px] px-8 py-8">
+        <section className="min-w-0 flex-1 overflow-x-hidden">
+          <div className="mx-auto max-w-[1100px] px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
             {/* Breadcrumb */}
             <div className="mb-5 flex items-center gap-2 text-xs font-medium">
               <Link
@@ -161,7 +195,7 @@ export default function RunReviewPage() {
 
             {/* Heading */}
             <div>
-              <h1 className="text-[30px] font-bold tracking-tight text-[#102a43]">
+              <h1 className="text-[26px] font-bold tracking-tight text-[#102a43] sm:text-[30px]">
                 Run Review
               </h1>
 
@@ -175,7 +209,7 @@ export default function RunReviewPage() {
             {/* Form */}
             <form
               onSubmit={handleSubmit}
-              className="mt-8 rounded-xl border border-[#d9e2ec] bg-white p-7 shadow-sm"
+              className="mt-6 rounded-xl border border-[#d9e2ec] bg-white p-4 shadow-sm sm:mt-8 sm:p-6 lg:p-7"
             >
               <div>
                 <h2 className="text-[16px] font-bold text-[#102a43]">
@@ -188,7 +222,7 @@ export default function RunReviewPage() {
               </div>
 
               {/* Repository */}
-              <div className="mt-7">
+              <div className="mt-6 sm:mt-7">
                 <label
                   htmlFor="repositoryPath"
                   className="block text-xs font-semibold text-[#486581]"
@@ -203,20 +237,19 @@ export default function RunReviewPage() {
                   onChange={(event) =>
                     setRepositoryPath(event.target.value)
                   }
-                  placeholder="C:\path\to\repository"
-                  className="mt-2 w-full rounded-lg border border-[#cbd5e1] bg-white px-4 py-3 font-mono text-sm text-[#102a43] outline-none transition placeholder:text-[#94a3b8] focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10"
+                  placeholder="sample-payment-service"
+                  className="mt-2 w-full min-w-0 rounded-lg border border-[#cbd5e1] bg-white px-3 py-3 font-mono text-sm text-[#102a43] outline-none transition placeholder:text-[#94a3b8] focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10 sm:px-4"
                   required
                 />
 
-                <p className="mt-2 text-[11px] text-[#829ab1]">
-                  This path is resolved by the IssueFix backend running on this
-                  machine.
+                <p className="mt-2 text-[11px] leading-5 text-[#829ab1]">
+                  Use the bundled demo repository: sample-payment-service.
                 </p>
               </div>
 
               {/* Revision + Review type */}
-              <div className="mt-6 grid grid-cols-2 gap-5">
-                <div>
+              <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="min-w-0">
                   <label
                     htmlFor="revision"
                     className="block text-xs font-semibold text-[#486581]"
@@ -230,11 +263,11 @@ export default function RunReviewPage() {
                     value={revision}
                     onChange={(event) => setRevision(event.target.value)}
                     placeholder="main, commit SHA, or local"
-                    className="mt-2 w-full rounded-lg border border-[#cbd5e1] bg-white px-4 py-3 font-mono text-sm text-[#102a43] outline-none transition placeholder:text-[#94a3b8] focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10"
+                    className="mt-2 w-full min-w-0 rounded-lg border border-[#cbd5e1] bg-white px-3 py-3 font-mono text-sm text-[#102a43] outline-none transition placeholder:text-[#94a3b8] focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10 sm:px-4"
                   />
                 </div>
 
-                <div>
+                <div className="min-w-0">
                   <label
                     htmlFor="reviewType"
                     className="block text-xs font-semibold text-[#486581]"
@@ -246,7 +279,7 @@ export default function RunReviewPage() {
                     id="reviewType"
                     value={reviewType}
                     onChange={(event) => setReviewType(event.target.value)}
-                    className="mt-2 w-full rounded-lg border border-[#cbd5e1] bg-white px-4 py-3 text-sm text-[#102a43] outline-none transition focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10"
+                    className="mt-2 w-full min-w-0 rounded-lg border border-[#cbd5e1] bg-white px-3 py-3 text-sm text-[#102a43] outline-none transition focus:border-[#0f62fe] focus:ring-2 focus:ring-[#0f62fe]/10 sm:px-4"
                   >
                     <option value="security">Security</option>
                     <option value="general">General</option>
@@ -256,12 +289,12 @@ export default function RunReviewPage() {
               </div>
 
               {/* Pipeline */}
-              <div className="mt-7 rounded-lg border border-[#e1e8ef] bg-[#f8fafc] p-5">
+              <div className="mt-6 rounded-lg border border-[#e1e8ef] bg-[#f8fafc] p-4 sm:mt-7 sm:p-5">
                 <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#829ab1]">
                   Review pipeline
                 </div>
 
-                <div className="mt-4 grid grid-cols-4 gap-3">
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   <PipelineStep number="01" text="Review" />
                   <PipelineStep number="02" text="Evidence" />
                   <PipelineStep number="03" text="Verify" />
@@ -276,7 +309,7 @@ export default function RunReviewPage() {
                     Review failed
                   </div>
 
-                  <div className="mt-1 text-sm text-[#b4232f]">
+                  <div className="mt-1 break-words text-sm text-[#b4232f]">
                     {error}
                   </div>
                 </div>
@@ -304,10 +337,10 @@ export default function RunReviewPage() {
               )}
 
               {/* Submit */}
-              <div className="mt-7 flex items-center justify-between border-t border-[#e8eef4] pt-6">
+              <div className="mt-7 flex flex-col-reverse gap-4 border-t border-[#e8eef4] pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <Link
                   href="/reviews"
-                  className="text-sm font-medium text-[#627d98] hover:text-[#102a43]"
+                  className="text-center text-sm font-medium text-[#627d98] hover:text-[#102a43] sm:text-left"
                 >
                   Cancel
                 </Link>
@@ -315,7 +348,7 @@ export default function RunReviewPage() {
                 <button
                   type="submit"
                   disabled={running}
-                  className="rounded-lg bg-[#0f62fe] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0353e9] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="w-full rounded-lg bg-[#0f62fe] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0353e9] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                 >
                   {running ? "Running review..." : "Run Review"}
                 </button>
@@ -323,15 +356,15 @@ export default function RunReviewPage() {
             </form>
 
             {/* Important note */}
-            <div className="mt-5 rounded-lg border border-[#d9e2ec] bg-white px-5 py-4">
+            <div className="mt-5 rounded-lg border border-[#d9e2ec] bg-white px-4 py-4 sm:px-5">
               <div className="text-xs font-semibold text-[#486581]">
                 Current provider
               </div>
 
               <p className="mt-1 text-xs leading-5 text-[#829ab1]">
                 The development environment currently uses the local review
-                provider. IBM Bob is shown as not connected until the real Bob
-                adapter is configured.
+                provider. The review pipeline is designed to support the
+                configured review provider and evidence verification flow.
               </p>
             </div>
           </div>
@@ -349,12 +382,14 @@ function PipelineStep({
   text: string;
 }) {
   return (
-    <div className="flex items-center gap-2 rounded-md border border-[#d9e2ec] bg-white px-3 py-3">
-      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#edf4ff] text-[9px] font-bold text-[#0f62fe]">
+    <div className="flex min-w-0 items-center gap-2 rounded-md border border-[#d9e2ec] bg-white px-3 py-3">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#edf4ff] text-[9px] font-bold text-[#0f62fe]">
         {number}
       </span>
 
-      <span className="text-xs font-medium text-[#486581]">{text}</span>
+      <span className="truncate text-xs font-medium text-[#486581]">
+        {text}
+      </span>
     </div>
   );
 }
